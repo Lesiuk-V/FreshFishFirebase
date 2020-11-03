@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    public class VehiclesContreller : Controller
+    public class VehiclesController : Controller
     {
         VehiclesHelper Helper = new VehiclesHelper();
-        public VehiclesContreller(VehiclesHelper helper)
+        public VehiclesController(VehiclesHelper helper)
         {
             Helper = helper;
         }
@@ -98,12 +96,12 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var vehicles = await Helper.GetVehicle(id);
-            if (vehicles == null)
+            var product = await Helper.GetVehicle(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(vehicles);
+            return View(product);
         }
 
         // POST: ProductsController/Delete/5
@@ -129,6 +127,5 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
-
     }
 }

@@ -31,7 +31,7 @@ namespace WebApplication1.Helpers
         {
             var allProducts = await GetAllProductsAsync();
             await client
-                .Child("freshfish")
+                .Child("freshfish/")
                 .OnceAsync<Products>();
 
             return allProducts.Where(p => p.Id == ID).FirstOrDefault();
@@ -53,7 +53,7 @@ namespace WebApplication1.Helpers
         public async Task AddProduct(Products product)
         {
             await client
-                .Child("freshfish/")
+                .Child("freshfish")
                 .PostAsync(new Products()
                 {
                     Id = GetRandomId(),

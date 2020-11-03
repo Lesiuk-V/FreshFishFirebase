@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
 
@@ -30,12 +28,12 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var product = await Helper.GetWorker(id);
-            if (product == null)
+            var worker = await Helper.GetWorker(id);
+            if (worker == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(worker);
         }
         public ActionResult Create()
         {
@@ -98,12 +96,12 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var product = await Helper.GetWorker(id);
-            if (product == null)
+            var worker = await Helper.GetWorker(id);
+            if (worker == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(worker);
         }
 
         // POST: ProductsController/Delete/5
@@ -113,9 +111,9 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var product = Helper.GetWorker(id);
+                var worker = Helper.GetWorker(id);
 
-                if (product == null)
+                if (worker == null)
                 {
                     return NotFound();
                 }
@@ -129,6 +127,5 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
-
     }
 }
