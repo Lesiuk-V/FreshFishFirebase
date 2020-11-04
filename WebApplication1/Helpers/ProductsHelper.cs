@@ -10,13 +10,11 @@ namespace WebApplication1.Helpers
 {
     public class ProductsHelper
     {
-        FirebaseClient client = new FirebaseClient("https://freshfish-bf927.firebaseio.com");
-        //TODO: initiate this variable in the required method
         double sum;
         public async Task<List<Products>> GetAllProductsAsync()
         {
-            return (await client
-                .Child("freshfish")
+            return (await Globals.Client
+                .Child("products")
                 .OnceAsync<Products>()).Select(item => new Products
                 {
                     Id = item.Object.Id,
@@ -30,8 +28,8 @@ namespace WebApplication1.Helpers
         public async Task<Products> GetProduct(string ID)
         {
             var allProducts = await GetAllProductsAsync();
-            await client
-                .Child("freshfish/")
+            await Globals.Client
+                .Child("products/")
                 .OnceAsync<Products>();
 
             return allProducts.Where(p => p.Id == ID).FirstOrDefault();
@@ -52,8 +50,8 @@ namespace WebApplication1.Helpers
 
         public async Task AddProduct(Products product)
         {
-            await client
-                .Child("freshfish")
+            await Globals.Client
+                .Child("products")
                 .PostAsync(new Products()
                 {
                     Id = GetRandomId(),
@@ -66,21 +64,21 @@ namespace WebApplication1.Helpers
 
         public async Task UpdateProduct(string id, Products product)
         {
-            var toUpdateProduct = (await client
-                .Child("freshfish")
+            var toUpdateProduct = (await Globals.Client
+                .Child("products")
                 .OnceAsync<Products>()).Where(a => a.Object.Id == id).FirstOrDefault();
 
-            await client
-                .Child("freshfish")
+            await Globals.Client
+                .Child("products")
                 .Child(toUpdateProduct.Key)
                 .PutAsync(product);
         }
         public async Task DeleteProduct(string ID)
         {
-            var toDeleteProduct = (await client
+            var toDeleteProduct = (await Globals.Client
                 .Child("freshfish")
                 .OnceAsync<Products>()).Where(a => a.Object.Id == ID).FirstOrDefault();
-            await client.Child("freshfish").Child(toDeleteProduct.Key).DeleteAsync();
+            await Globals.Client.Child("products").Child(toDeleteProduct.Key).DeleteAsync();
         }
         #region Random ID FOR PRODUCTS
         string GetRandomId()

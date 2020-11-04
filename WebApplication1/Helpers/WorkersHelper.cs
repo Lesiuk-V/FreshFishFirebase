@@ -11,12 +11,11 @@ namespace WebApplication1.Helpers
 {
     public class WorkersHelper
     {
-        FirebaseClient client = new FirebaseClient("https://freshfish-bf927.firebaseio.com");//поле для зв'язку з віддаленим сервером Firebase
 
         //отримання всіх даних працівників з серверу
         public async Task<List<Worker>> GetAllWorkersAsync()
         {
-            return (await client
+            return (await Globals.Client
                 .Child("workers")
                 .OnceAsync<Worker>()).Select(item => new Worker
                 {
@@ -36,7 +35,7 @@ namespace WebApplication1.Helpers
         public async Task AddWorker(Worker worker)
         {
 
-            await client
+            await Globals.Client
                 .Child("workers/")
                 .PostAsync(new Worker()
                 {
@@ -56,7 +55,7 @@ namespace WebApplication1.Helpers
         public async Task<Worker> GetWorker(string ID)
         {
             var allWorkers = await GetAllWorkersAsync();
-            await client
+            await Globals.Client
                 .Child("workers")
                 .OnceAsync<Worker>();
 
@@ -66,11 +65,11 @@ namespace WebApplication1.Helpers
         //оновлення даних конкретного працівника
         public async Task UpdateWorker(string id, Worker worker)
         {
-            var toUpdateProduct = (await client
+            var toUpdateProduct = (await Globals.Client
                .Child("workers")
                .OnceAsync<Worker>()).Where(a => a.Object.Id == id).FirstOrDefault();
 
-            await client
+            await Globals.Client
                 .Child("workers")
                 .Child(toUpdateProduct.Key)
                 .PutAsync(worker);
@@ -78,10 +77,10 @@ namespace WebApplication1.Helpers
         //видалення конкретного працівника за айді
         public async Task DeleteWorker(string ID)
         {
-            var toDeleteWorker = (await client
+            var toDeleteWorker = (await Globals.Client
                 .Child("workers")
                 .OnceAsync<Worker>()).Where(w => w.Object.Id == ID).FirstOrDefault();
-            await client.Child("workers").Child(toDeleteWorker.Key).DeleteAsync();
+            await Globals.Client.Child("workers").Child(toDeleteWorker.Key).DeleteAsync();
         }
 
 

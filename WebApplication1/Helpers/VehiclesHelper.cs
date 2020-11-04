@@ -11,12 +11,11 @@ namespace WebApplication1.Helpers
 {
     public class VehiclesHelper
     {
-        FirebaseClient client = new FirebaseClient("https://freshfish-bf927.firebaseio.com");//поле для зв'язку з віддаленим сервером Firebase
 
         //отримання всіх даних працівників з серверу
         public async Task<List<Vehicles>> GetAllVehiclesAsync()
         {
-            return (await client
+            return (await Globals.Client
                 .Child("vehicles")
                 .OnceAsync<Vehicles>()).Select(item => new Vehicles
                 {
@@ -33,7 +32,7 @@ namespace WebApplication1.Helpers
         public async Task AddVehicles(Vehicles vehicles)
         {
 
-            await client
+            await Globals.Client
                 .Child("vehicles/")
                 .PostAsync(new Vehicles()
                 {
@@ -50,7 +49,7 @@ namespace WebApplication1.Helpers
         public async Task<Vehicles> GetVehicle(string id)
         {
             var allVehicles = await GetAllVehiclesAsync();
-            await client
+            await Globals.Client
                 .Child("vehicles")
                 .OnceAsync<Vehicles>();
 
@@ -60,11 +59,11 @@ namespace WebApplication1.Helpers
 
         public async Task UpdateVehicle(string id, Vehicles vehicles)
         {
-            var toUpdateVehicle = (await client
+            var toUpdateVehicle = (await Globals.Client
                .Child("vehicles")
                .OnceAsync<Vehicles>()).Where(a => a.Object.Id == id).FirstOrDefault();
 
-            await client
+            await Globals.Client
                 .Child("vehicles")
                 .Child(toUpdateVehicle.Key)
                 .PutAsync(vehicles);
@@ -72,10 +71,10 @@ namespace WebApplication1.Helpers
 
         public async Task DeleteVehicle(string id)
         {
-            var toDeleteVehicle = (await client
+            var toDeleteVehicle = (await Globals.Client
                 .Child("vehicles")
                 .OnceAsync<Vehicles>()).Where(v => v.Object.Id == id).FirstOrDefault();
-            await client.Child("vehicles").Child(toDeleteVehicle.Key).DeleteAsync();
+            await Globals.Client.Child("vehicles").Child(toDeleteVehicle.Key).DeleteAsync();
         }
 
 
