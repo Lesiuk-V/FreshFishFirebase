@@ -1,0 +1,52 @@
+﻿@model IEnumerable<WebApplication1.Models.Products>
+@{
+    var YValues = (from s in Model where s.Status.ToLower() == "yes" select s).Count();
+    var NValues = (from u in Model where u.Status.ToLower() == "no" select u).Count();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <title>Product Chart</title>
+</head>
+<body>
+    <div id="chartContainer"></div>
+    <script type="text/javascript">
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                title: {
+                    text: "Products Chart"
+                },
+                animationEnabled: true,
+                legend: {
+                    verticalAlign: "center",
+                    horizontalAlign: "left",
+                    fontSize: 20,
+                    fontFamily: "Helvetica"
+                },
+                theme: "light2",
+                data: [
+                    {
+                        type: "pie",
+                        indexLabelFontFamily: "Garamond",
+                        indexLabelFontSize: 20,
+                        indexLabel: "{label} {y}",
+                        startAngle: -20,
+                        showInLegend: true,
+                        toolTipContent: "{legendText} {y}",
+                        dataPoints: [
+                            { y: @Html.Raw(YValues), legendText: "Yes", label: "Yes" },
+                            { y: @Html.Raw(NValues), legendText: "No", label: "No" },
+                        ]
+                    }
+                ]
+            });
+            chart.render();
+        };
+    </script>
+
+</body>
+</html>	

@@ -5,18 +5,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
+    //[Route("api/products")]
     public class ProductController : Controller
     {
-        ProductsHelper Helper = new ProductsHelper();
+       ProductsHelper Helper = new ProductsHelper();
         public ProductController(ProductsHelper helper)
         {
             Helper = helper;
         }
+        public async Task<IActionResult> ProductChart()
+        {
+            return View(await Helper.GetAllProductsAsync());
+        }
+
 
         public async Task<IActionResult> Product()
         {
@@ -90,6 +97,7 @@ namespace WebApplication1.Controllers
             }
         }
 
+
         // GET: ProductsController/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
@@ -128,6 +136,11 @@ namespace WebApplication1.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult VisualProducts()
+        {
+            return Json(Helper.GetAllProductsAsync(), System.Web.Mvc.JsonRequestBehavior.AllowGet);
         }
 
     }
